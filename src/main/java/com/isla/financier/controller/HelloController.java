@@ -1,4 +1,4 @@
-package com.isla.financier;
+package com.isla.financier.controller;
 
 
 import org.springframework.stereotype.Controller;
