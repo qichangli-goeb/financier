@@ -11,15 +11,15 @@ public class TimeService {
         return OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     }
 
-    public LocalDate today(){
+    public LocalDate today() {
         return LocalDate.now();
     }
 
-    public LocalDate tomorrow(){
+    public LocalDate tomorrow() {
         return LocalDate.now().plusDays(1);
     }
 
-    public LocalDate yesterday(){
+    public LocalDate yesterday() {
         return LocalDate.now().minusDays(1);
     }
 }
