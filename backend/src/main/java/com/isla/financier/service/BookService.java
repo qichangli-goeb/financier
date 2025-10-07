@@ -1,29 +1,40 @@
 package com.isla.financier.service;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.isla.financier.api.Book;
+import com.isla.financier.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class BookService {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final BookRepository bookRepository;
 
-    public BookService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BookService(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
     }
 
     public List<String> getBookNames() {
-        return jdbcTemplate.query("SELECT name FROM book", (rs, rowNum) -> rs.getString("name"));
+        List<Book> books = bookRepository.getBooks();
+        List<String> bookNames = new ArrayList<>();
+        for (Book book : books) {
+            bookNames.add(book.name);
+        }
+        return bookNames;
     }
 
     public List<String> getBookAuthors() {
-        List<String> authors = jdbcTemplate.query("SELECT author FROM book", (rs, rowNum) -> rs.getString("author"));
-        Set<String> dedupAuthors = new HashSet<>(authors);
-        return new ArrayList<>(dedupAuthors);
+        List<Book> books = bookRepository.getBooks();
+        List<String> authors = new ArrayList<>();
+        for (Book book : books) {
+            authors.add(book.author);
+        }
+        return authors;
+    }
+
+    public List<Book> getBooks() {
+        return bookRepository.getBooks();
     }
 }
