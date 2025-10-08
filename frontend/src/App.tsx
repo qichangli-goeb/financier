@@ -5,6 +5,13 @@ import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [authors, setAuthors] = useState("");
+
+  async function getAuthors() {
+    const response = await fetch("http://localhost:5173/book/authors");
+    const authors = await response.text();
+    setAuthors(authors);
+  }
 
   return (
     <>
@@ -21,9 +28,8 @@ function App() {
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+        <button onClick={() => getAuthors()}>get authors</button>
+        <p>Authors: {authors}</p>
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
