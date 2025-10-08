@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 
 @Controller
-@RequestMapping("/time")
+@RequestMapping("/api/time")
 public class TimeController {
 
     private final TimeService timeService;

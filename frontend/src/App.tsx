@@ -8,7 +8,7 @@ function App() {
   const [authors, setAuthors] = useState("");
 
   async function getAuthors() {
-    const response = await fetch("http://localhost:5173/book/authors");
+    const response = await fetch("http://localhost:5173/api/book/authors");
     const authors = await response.text();
     setAuthors(authors);
   }
