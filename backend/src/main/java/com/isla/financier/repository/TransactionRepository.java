@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -29,19 +31,7 @@ public class TransactionRepository {
                 FROM transaction
                 WHERE id = ?
                 """;
-        List<TransactionEntity> result = jdbcTemplate.query(sql, (rs, rowNum) -> {
-            TransactionEntity transaction = new TransactionEntity();
-            transaction.id = rs.getInt("id");
-            transaction.description = rs.getString("description");
-            transaction.valueDate = LocalDate.parse(rs.getString("valuedate"));
-            transaction.otherPartyName = rs.getString("otherpartyname");
-            transaction.otherPartyIban = rs.getString("otherpartyiban");
-            transaction.myIban = rs.getString("myiban");
-            transaction.amountCents = rs.getInt("amountcents");
-            transaction.currency = rs.getString("currency");
-            transaction.balanceAfterTransactionCents = rs.getInt("balanceaftertransactioncents");
-            return transaction;
-        }, id);
+        List<TransactionEntity> result = jdbcTemplate.query(sql, (rs, rowNum) -> mapToEntity(rs), id);
 
         if (result.isEmpty()) {
             return null;
@@ -49,6 +39,7 @@ public class TransactionRepository {
             return result.getFirst();
         }
     }
+
     public TransactionEntity save(TransactionEntity transactionEntity) {
         SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("transaction")
@@ -70,22 +61,27 @@ public class TransactionRepository {
 
         return findById(id);
     }
+    
+    public List<TransactionEntity> findAll() {
+        String sql = """
+                SELECT *
+                FROM transaction
+                """;
+        List<TransactionEntity> result = jdbcTemplate.query(sql, (rs, rowNum) -> mapToEntity(rs));
+        return result;
+    }
 
-
-
-
-//    // language=postgresql
-//    String sql = """
-//                INSERT INTO transaction (description, valuedate, otherpartyname, otherpartyiban, myiban, amount, currency, balanceaftertransaction)
-//                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-//                """;
-//        jdbcTemplate.update(sql,
-//    transactionEntity.description,
-//    transactionEntity.valueDate,
-//    transactionEntity.otherPartyName,
-//    transactionEntity.otherPartyIban,
-//    transactionEntity.myIban,
-//    transactionEntity.amountCents,
-//    transactionEntity.currency,
-//    transactionEntity.balanceAfterTransactionCents);
+    public TransactionEntity mapToEntity(ResultSet rs) throws SQLException {
+        TransactionEntity transaction = new TransactionEntity();
+        transaction.id = rs.getInt("id");
+        transaction.description = rs.getString("description");
+        transaction.valueDate = LocalDate.parse(rs.getString("valuedate"));
+        transaction.otherPartyName = rs.getString("otherpartyname");
+        transaction.otherPartyIban = rs.getString("otherpartyiban");
+        transaction.myIban = rs.getString("myiban");
+        transaction.amountCents = rs.getInt("amountcents");
+        transaction.currency = rs.getString("currency");
+        transaction.balanceAfterTransactionCents = rs.getInt("balanceaftertransactioncents");
+        return transaction;
+    }
 }

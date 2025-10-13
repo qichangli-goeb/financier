@@ -5,10 +5,10 @@ import com.isla.financier.model.TransactionEntity;
 import com.isla.financier.service.TransactionService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/transactions")
@@ -34,17 +34,36 @@ public class TransactionController {
 
         TransactionEntity savedEntity = transactionService.save(entity);
 
-        Transaction saved = new Transaction();
-        saved.id = savedEntity.id;
-        saved.description = savedEntity.description;
-        saved.valueDate = savedEntity.valueDate;
-        saved.otherPartyName = savedEntity.otherPartyName;
-        saved.otherPartyIban = savedEntity.otherPartyIban;
-        saved.myIban = savedEntity.myIban;
-        saved.amount = savedEntity.amountCents / 100.0;
-        saved.currency = savedEntity.currency;
-        saved.balanceAfterTransaction = savedEntity.balanceAfterTransactionCents / 100.0;
+        return mapToTransaction(savedEntity);
+    }
 
-        return saved;
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Transaction> getAll() {
+        List<TransactionEntity> entities = transactionService.getAll();
+
+        List<Transaction> transactions = new ArrayList<>();
+        for (TransactionEntity entity : entities) {
+            Transaction transaction = mapToTransaction(entity);
+            transactions.add(transaction);
+        }
+
+        return transactions;
+    }
+
+    public Transaction mapToTransaction(TransactionEntity transactionEntity) {
+        Transaction transaction = new Transaction();
+
+        transaction.id = transactionEntity.id;
+        transaction.description = transactionEntity.description;
+        transaction.valueDate = transactionEntity.valueDate;
+        transaction.otherPartyName = transactionEntity.otherPartyName;
+        transaction.otherPartyIban = transactionEntity.otherPartyIban;
+        transaction.myIban = transactionEntity.myIban;
+        transaction.amount = transactionEntity.amountCents / 100.0;
+        transaction.currency = transactionEntity.currency;
+        transaction.balanceAfterTransaction = transactionEntity.balanceAfterTransactionCents / 100.0;
+
+        return transaction;
     }
 }
