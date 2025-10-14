@@ -23,18 +23,8 @@ public class TransactionController {
 
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody Transaction createTransaction(@RequestBody Transaction transaction) {
-        TransactionEntity entity = new TransactionEntity();
-        entity.description = transaction.description;
-        entity.valueDate = transaction.valueDate;
-        entity.otherPartyName = transaction.otherPartyName;
-        entity.otherPartyIban = transaction.otherPartyIban;
-        entity.myIban = transaction.myIban;
-        entity.amountCents = (int) Math.round(transaction.amount * 100);
-        entity.currency = transaction.currency;
-        entity.balanceAfterTransactionCents = (int) Math.round(transaction.balanceAfterTransaction * 100);
-
+        TransactionEntity entity = mapToTransactionEntity(transaction);
         TransactionEntity savedEntity = transactionService.save(entity);
-
         return mapToTransaction(savedEntity);
     }
 
@@ -52,31 +42,55 @@ public class TransactionController {
         return transactions;
     }
 
-    @GetMapping(value ="/{id}" )
-    public ResponseEntity<Transaction> getById(@PathVariable int id){
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Transaction> getById(@PathVariable int id) {
         TransactionEntity entity = transactionService.getById(id);
         if (entity == null) {
             return ResponseEntity.notFound().build();
-        }
-        else {
+        } else {
             Transaction transaction = mapToTransaction(entity);
             return ResponseEntity.ok(transaction);
         }
     }
 
 
-    @DeleteMapping(value ="/{id}" )
-    public ResponseEntity<Transaction> deleteById(@PathVariable int id){
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Transaction> deleteById(@PathVariable int id) {
         TransactionEntity entity = transactionService.deleteById(id);
         if (entity == null) {
             return ResponseEntity.notFound().build();
-        }
-        else {
+        } else {
             Transaction transaction = mapToTransaction(entity);
             return ResponseEntity.ok(transaction);
         }
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Transaction> editById(@PathVariable int id, @RequestBody Transaction transaction) {
+        TransactionEntity entity = mapToTransactionEntity(transaction);
+        TransactionEntity savedEntity = transactionService.editById(id, entity);
+        if (savedEntity == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(mapToTransaction(savedEntity));
+        }
+    }
+
+
+    public TransactionEntity mapToTransactionEntity(Transaction transaction) {
+        TransactionEntity entity = new TransactionEntity();
+        entity.id = transaction.id;
+        entity.description = transaction.description;
+        entity.valueDate = transaction.valueDate;
+        entity.otherPartyName = transaction.otherPartyName;
+        entity.otherPartyIban = transaction.otherPartyIban;
+        entity.myIban = transaction.myIban;
+        entity.amountCents = (int) Math.round(transaction.amount * 100);
+        entity.currency = transaction.currency;
+        entity.balanceAfterTransactionCents = (int) Math.round(transaction.balanceAfterTransaction * 100);
+
+        return entity;
+    }
 
     private Transaction mapToTransaction(TransactionEntity transactionEntity) {
         Transaction transaction = new Transaction();

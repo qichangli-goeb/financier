@@ -36,4 +36,16 @@ public class TransactionService {
             return null;
         }
     }
+
+
+    public TransactionEntity editById(int id, TransactionEntity transactionEntity) {
+       TransactionEntity result = transactionRepository.findById(id);
+       if (result != null) {
+           transactionEntity.id = id;
+           transactionRepository.update(transactionEntity);
+           return transactionEntity;
+       } else{
+           return null;
+       }
+    }
 }

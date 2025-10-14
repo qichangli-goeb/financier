@@ -72,6 +72,32 @@ public class TransactionRepository {
         return findById(id);
     }
 
+    public void update(TransactionEntity transactionEntity) {
+        String sql = """
+                UPDATE transaction
+                SET description = ?,
+                    valueDate = ?,
+                    otherPartyName = ?,
+                    otherPartyIban = ?,
+                    myIban = ?,
+                    amountCents = ?,
+                    currency = ?,
+                    balanceAfterTransactioncents = ?
+                
+                WHERE id = ?
+                """;
+        jdbcTemplate.update(sql,
+                transactionEntity.description
+                , transactionEntity.valueDate
+                , transactionEntity.otherPartyName
+                , transactionEntity.otherPartyIban
+                , transactionEntity.myIban
+                , transactionEntity.amountCents
+                , transactionEntity.currency
+                , transactionEntity.balanceAfterTransactionCents
+                , transactionEntity.id);
+    }
+
     public List<TransactionEntity> findAll() {
         String sql = """
                 SELECT *
