@@ -61,7 +61,7 @@ public class TransactionRepository {
 
         return findById(id);
     }
-    
+
     public List<TransactionEntity> findAll() {
         String sql = """
                 SELECT *
@@ -71,7 +71,7 @@ public class TransactionRepository {
         return result;
     }
 
-    public TransactionEntity mapToEntity(ResultSet rs) throws SQLException {
+    private TransactionEntity mapToEntity(ResultSet rs) throws SQLException {
         TransactionEntity transaction = new TransactionEntity();
         transaction.id = rs.getInt("id");
         transaction.description = rs.getString("description");

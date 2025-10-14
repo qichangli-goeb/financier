@@ -4,6 +4,7 @@ import com.isla.financier.api.Transaction;
 import com.isla.financier.model.TransactionEntity;
 import com.isla.financier.service.TransactionService;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,7 +52,19 @@ public class TransactionController {
         return transactions;
     }
 
-    public Transaction mapToTransaction(TransactionEntity transactionEntity) {
+    @GetMapping(value ="/{id}" )
+    public ResponseEntity<Transaction> getById(@PathVariable int id){
+        TransactionEntity entity = transactionService.getById(id);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            Transaction transaction = mapToTransaction(entity);
+            return ResponseEntity.ok(transaction);
+        }
+    }
+
+    private Transaction mapToTransaction(TransactionEntity transactionEntity) {
         Transaction transaction = new Transaction();
 
         transaction.id = transactionEntity.id;

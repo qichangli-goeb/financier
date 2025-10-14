@@ -22,4 +22,8 @@ public class TransactionService {
     public List<TransactionEntity> getAll() {
         return transactionRepository.findAll();
     }
+
+    public TransactionEntity getById(int id) {
+        return transactionRepository.findById(id);
+    }
 }
