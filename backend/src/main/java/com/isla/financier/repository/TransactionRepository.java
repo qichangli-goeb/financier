@@ -40,6 +40,16 @@ public class TransactionRepository {
         }
     }
 
+    public void deleteById(int id) {
+        String sql = """
+                DELETE
+                FROM transaction
+                WHERE id = ?
+                """;
+        jdbcTemplate.update(sql, id);
+    }
+
+
     public TransactionEntity save(TransactionEntity transactionEntity) {
         SimpleJdbcInsert insert = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("transaction")

@@ -26,4 +26,14 @@ public class TransactionService {
     public TransactionEntity getById(int id) {
         return transactionRepository.findById(id);
     }
+
+    public TransactionEntity deleteById(int id) {
+        TransactionEntity result = transactionRepository.findById(id);
+        if (result != null) {
+            transactionRepository.deleteById(id);
+            return result;
+        } else {
+            return null;
+        }
+    }
 }

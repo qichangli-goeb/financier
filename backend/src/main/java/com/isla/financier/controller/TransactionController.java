@@ -64,6 +64,20 @@ public class TransactionController {
         }
     }
 
+
+    @DeleteMapping(value ="/{id}" )
+    public ResponseEntity<Transaction> deleteById(@PathVariable int id){
+        TransactionEntity entity = transactionService.deleteById(id);
+        if (entity == null) {
+            return ResponseEntity.notFound().build();
+        }
+        else {
+            Transaction transaction = mapToTransaction(entity);
+            return ResponseEntity.ok(transaction);
+        }
+    }
+
+
     private Transaction mapToTransaction(TransactionEntity transactionEntity) {
         Transaction transaction = new Transaction();
 
