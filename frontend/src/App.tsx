@@ -1,39 +1,18 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import financierLogo from "./assets/financier.svg";
 import "./App.css";
+import TransactionList from "./components/transaction-list/TransactionList.tsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [authors, setAuthors] = useState("");
-
-  async function getAuthors() {
-    const response = await fetch("http://localhost:5173/api/book/authors");
-    const authors = await response.text();
-    setAuthors(authors);
-  }
-
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
+        <a target="_blank">
+          <img src={financierLogo} className="logo" alt="financier logo" />
         </a>
       </div>
       <h1>Financier</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <button onClick={() => getAuthors()}>get authors</button>
-        <p>Authors: {authors}</p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <TransactionList />
     </>
   );
 }

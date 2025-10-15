@@ -1,0 +1,11 @@
+{
+  "amount": 1000000.23,
+  "balanceAfterTransaction": 2000000.23,
+  "currency": "EUR",
+  "description": "my description",
+  "id": 999999,
+  "myIban": "DE9876543210",
+  "otherPartyIban": "DE0123456789",
+  "otherPartyName": "you",
+  "valueDate": "2025-10-08"
+}
