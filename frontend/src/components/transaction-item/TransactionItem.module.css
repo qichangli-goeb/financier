@@ -1,3 +1,10 @@
 .item {
-    border: 1px solid teal;
+    padding: 8px;
+    gap: 16px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.delete {
+    background: #ffa1ad;
 }
