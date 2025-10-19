@@ -1,6 +1,7 @@
 import financierLogo from "./assets/financier.svg";
 import "./App.css";
 import TransactionList from "./components/transaction-list/TransactionList.tsx";
+import TransactionSaveForm from "./components/transaction-save-form/TransactionSaveForm.tsx";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         </a>
       </div>
       <h1>Financier</h1>
+      <TransactionSaveForm />
 
       <TransactionList />
     </>
