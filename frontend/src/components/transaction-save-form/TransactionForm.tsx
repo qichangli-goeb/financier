@@ -38,7 +38,7 @@ function isValidIban(iban: string): boolean {
   return iban.length >= 22 && iban.length <= 34;
 }
 
-export default function TransactionSaveForm() {
+export default function TransactionForm() {
   const [data, setData] = useState<TransactionFormState>({
     description: "",
     valueDate: "",
