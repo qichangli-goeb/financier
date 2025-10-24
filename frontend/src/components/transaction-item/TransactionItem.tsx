@@ -1,5 +1,6 @@
 import styles from "./TransactionItem.module.css";
 import type { Transaction } from "../../api/types.ts";
+import { IconTrashOff } from "@tabler/icons-react";
 
 export interface TransactionItemProps {
   transaction: Transaction;
@@ -13,11 +14,8 @@ function TransactionItem(props: TransactionItemProps) {
         {props.transaction.id} / {props.transaction.description} /{" "}
         {props.transaction.amount}
       </p>
-      <button
-        className={styles.delete}
-        onClick={() => props.onDelete(props.transaction.id)}
-      >
-        X
+      <button onClick={() => props.onDelete(props.transaction.id)}>
+        <IconTrashOff color="orangered" />
       </button>
     </div>
   );

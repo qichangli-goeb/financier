@@ -1,7 +1,7 @@
 import financierLogo from "./assets/financier.svg";
 import "./App.css";
 import TransactionList from "./components/transaction-list/TransactionList.tsx";
-import TransactionForm from "./components/transaction-save-form/TransactionForm.tsx";
+import TransactionForm from "./components/transaction-form/TransactionForm.tsx";
 
 function App() {
   return (

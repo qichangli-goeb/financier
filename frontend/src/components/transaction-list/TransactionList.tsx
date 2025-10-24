@@ -28,7 +28,6 @@ function TransactionList() {
 
   return (
     <div className={styles.list}>
-      <h3>Transactions</h3>
       {transactions.map((item) => (
         <TransactionItem transaction={item} onDelete={deleteTransaction} />
       ))}

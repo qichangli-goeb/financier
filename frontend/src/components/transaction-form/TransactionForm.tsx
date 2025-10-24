@@ -1,6 +1,7 @@
-import styles from "./TransactionSaveForm.module.css";
+import styles from "./TransactionForm.module.css";
 import { useState } from "react";
 import type { Transaction } from "../../api/types.ts";
+import { useNavigate } from "react-router";
 
 interface TransactionFormState {
   description: string;
@@ -62,16 +63,21 @@ export default function TransactionForm() {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   async function saveTransaction() {
     try {
+      // first remove any error messages from last time
       setError(null);
+
+      // prepare transaction infos to send to server
       const transaction: Transaction = {
         ...data,
         id: 0,
         amount: parseFloat(data.amount),
         balanceAfterTransaction: parseFloat(data.balanceAfterTransaction),
       };
+      // send the savetransaction request to server
       const response = await fetch(`http://localhost:5173/api/transactions`, {
         method: "POST",
         headers: {
@@ -79,7 +85,10 @@ export default function TransactionForm() {
         },
         body: JSON.stringify(transaction),
       });
-      if (!response.ok) {
+
+      if (response.ok) {
+        navigate(-1);
+      } else {
         const errorMessage = await response.text();
         setError("Error: " + errorMessage);
       }
@@ -92,7 +101,6 @@ export default function TransactionForm() {
   return (
     <div className={styles.card}>
       {error ? <div className={styles.error}>{error}</div> : null}
-      <h3>Save Transaction</h3>
       <form>
         <div className={styles.formGroup}>
           <label htmlFor="description">Description</label>

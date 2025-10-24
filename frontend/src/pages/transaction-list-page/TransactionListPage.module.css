@@ -1,0 +1,14 @@
+main {
+  background: white;
+  width: 960px;
+  min-height: 100vh;
+  padding: 8px 96px 96px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+
+}
+
