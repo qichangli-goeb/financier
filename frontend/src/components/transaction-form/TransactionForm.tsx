@@ -39,27 +39,26 @@ function isValidIban(iban: string): boolean {
   return iban.length >= 22 && iban.length <= 34;
 }
 
-export default function TransactionForm() {
-  const [data, setData] = useState<TransactionFormState>({
-    description: "",
-    valueDate: "",
-    otherPartyName: "",
-    otherPartyIban: "",
-    myIban: "",
-    amount: "",
-    currency: "",
-    balanceAfterTransaction: "",
+export interface TransactionFormProps {
+  transaction: Transaction;
+}
+
+export default function TransactionForm(props: TransactionFormProps) {
+  const [formState, setFormState] = useState<TransactionFormState>({
+    ...props.transaction,
+    amount: String(props.transaction.amount),
+    balanceAfterTransaction: String(props.transaction.balanceAfterTransaction),
   });
 
   const [valid, setValid] = useState({
-    description: isValidDescription(data.description),
-    valueDate: isValidDate(data.valueDate),
+    description: isValidDescription(formState.description),
+    valueDate: isValidDate(formState.valueDate),
     otherPartyName: true,
-    otherPartyIban: isValidIban(data.otherPartyIban),
-    myIban: isValidIban(data.myIban),
-    amount: isValidNumber(data.amount),
-    currency: isValidCurrency(data.currency),
-    balanceAfterTransaction: isValidNumber(data.balanceAfterTransaction),
+    otherPartyIban: isValidIban(formState.otherPartyIban),
+    myIban: isValidIban(formState.myIban),
+    amount: isValidNumber(formState.amount),
+    currency: isValidCurrency(formState.currency),
+    balanceAfterTransaction: isValidNumber(formState.balanceAfterTransaction),
   });
 
   const [error, setError] = useState<string | null>(null);
@@ -72,10 +71,10 @@ export default function TransactionForm() {
 
       // prepare transaction infos to send to server
       const transaction: Transaction = {
-        ...data,
+        ...formState,
         id: 0,
-        amount: parseFloat(data.amount),
-        balanceAfterTransaction: parseFloat(data.balanceAfterTransaction),
+        amount: parseFloat(formState.amount),
+        balanceAfterTransaction: parseFloat(formState.balanceAfterTransaction),
       };
       // send the savetransaction request to server
       const response = await fetch(`http://localhost:5173/api/transactions`, {
@@ -107,9 +106,12 @@ export default function TransactionForm() {
           <input
             id="description"
             placeholder="Description"
-            value={data.description}
+            value={formState.description}
             onChange={(evt) => {
-              setData({ ...data, description: evt.currentTarget.value });
+              setFormState({
+                ...formState,
+                description: evt.currentTarget.value,
+              });
               setValid({
                 ...valid,
                 description: isValidDescription(evt.currentTarget.value),
@@ -124,9 +126,12 @@ export default function TransactionForm() {
           <input
             id="valueDate"
             placeholder="Date"
-            value={data.valueDate}
+            value={formState.valueDate}
             onChange={(evt) => {
-              setData({ ...data, valueDate: evt.currentTarget.value });
+              setFormState({
+                ...formState,
+                valueDate: evt.currentTarget.value,
+              });
               setValid({
                 ...valid,
                 valueDate: isValidDate(evt.currentTarget.value),
@@ -141,9 +146,9 @@ export default function TransactionForm() {
           <input
             id="my-iban"
             placeholder="My IBAN"
-            value={data.myIban}
+            value={formState.myIban}
             onChange={(evt) => {
-              setData({ ...data, myIban: evt.currentTarget.value });
+              setFormState({ ...formState, myIban: evt.currentTarget.value });
               setValid({
                 ...valid,
                 myIban: isValidIban(evt.currentTarget.value),
@@ -159,9 +164,9 @@ export default function TransactionForm() {
             id="amount"
             placeholder="Amount"
             type="number"
-            value={data.amount}
+            value={formState.amount}
             onChange={(evt) => {
-              setData({ ...data, amount: evt.currentTarget.value });
+              setFormState({ ...formState, amount: evt.currentTarget.value });
               setValid({
                 ...valid,
                 amount: isValidNumber(evt.currentTarget.value),
@@ -176,9 +181,9 @@ export default function TransactionForm() {
           <input
             id="currrency"
             placeholder="Currrency"
-            value={data.currency}
+            value={formState.currency}
             onChange={(evt) => {
-              setData({ ...data, currency: evt.currentTarget.value });
+              setFormState({ ...formState, currency: evt.currentTarget.value });
               setValid({
                 ...valid,
                 currency: isValidCurrency(evt.currentTarget.value),
@@ -192,9 +197,12 @@ export default function TransactionForm() {
           <input
             id="other-party-name"
             placeholder="Other Party Name"
-            value={data.otherPartyName}
+            value={formState.otherPartyName}
             onChange={(evt) =>
-              setData({ ...data, otherPartyName: evt.currentTarget.value })
+              setFormState({
+                ...formState,
+                otherPartyName: evt.currentTarget.value,
+              })
             }
           />
         </div>
@@ -205,9 +213,12 @@ export default function TransactionForm() {
           <input
             id="other-party-iban"
             placeholder="Other Party IBAN"
-            value={data.otherPartyIban}
+            value={formState.otherPartyIban}
             onChange={(evt) => {
-              setData({ ...data, otherPartyIban: evt.currentTarget.value });
+              setFormState({
+                ...formState,
+                otherPartyIban: evt.currentTarget.value,
+              });
 
               const value = evt.currentTarget.value;
               setValid({
@@ -226,10 +237,10 @@ export default function TransactionForm() {
           <input
             id="balance-after-transaction"
             placeholder="Balance After Transaction"
-            value={data.balanceAfterTransaction}
+            value={formState.balanceAfterTransaction}
             onChange={(evt) => {
-              setData({
-                ...data,
+              setFormState({
+                ...formState,
                 balanceAfterTransaction: evt.currentTarget.value,
               });
               setValid({
