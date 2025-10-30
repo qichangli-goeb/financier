@@ -72,18 +72,26 @@ export default function TransactionForm(props: TransactionFormProps) {
       // prepare transaction infos to send to server
       const transaction: Transaction = {
         ...formState,
-        id: 0,
+        id: props.transaction.id,
         amount: parseFloat(formState.amount),
         balanceAfterTransaction: parseFloat(formState.balanceAfterTransaction),
       };
+
+      const isEditing = props.transaction.id > 0;
+
       // send the savetransaction request to server
-      const response = await fetch(`http://localhost:5173/api/transactions`, {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
+      const response = await fetch(
+        isEditing
+          ? `http://localhost:5173/api/transactions/${props.transaction.id}`
+          : `http://localhost:5173/api/transactions`,
+        {
+          method: isEditing ? "PUT" : "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify(transaction),
         },
-        body: JSON.stringify(transaction),
-      });
+      );
 
       if (response.ok) {
         navigate(-1);
