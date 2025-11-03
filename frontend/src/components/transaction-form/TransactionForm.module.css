@@ -18,6 +18,14 @@ form {
     gap: 16px;
 }
 
+select, input {
+    min-width: 150px;
+}
+
 .error {
     color: red;
+}
+.rightSide {
+    display: flex;
+    gap:8px;
 }

@@ -17,7 +17,7 @@ interface TransactionFormState {
   balanceAfterTransaction: string;
 }
 
-const validCurrencies = ["EUR", "USD"];
+const validCurrencies = ["EUR", "USD", "GBP"];
 
 function isValidCurrency(currency: string): boolean {
   return validCurrencies.includes(currency);
@@ -57,7 +57,7 @@ export default function TransactionForm(props: TransactionFormProps) {
     otherPartyIban: isValidIban(formState.otherPartyIban),
     myIban: isValidIban(formState.myIban),
     amount: isValidNumber(formState.amount),
-    currency: isValidCurrency(formState.currency),
+    currency: true,
     balanceAfterTransaction: isValidNumber(formState.balanceAfterTransaction),
   });
 
@@ -111,152 +111,179 @@ export default function TransactionForm(props: TransactionFormProps) {
       <form>
         <div className={styles.formGroup}>
           <label htmlFor="description">Description</label>
-          <input
-            id="description"
-            placeholder="Description"
-            value={formState.description}
-            onChange={(evt) => {
-              setFormState({
-                ...formState,
-                description: evt.currentTarget.value,
-              });
-              setValid({
-                ...valid,
-                description: isValidDescription(evt.currentTarget.value),
-              });
-            }}
-          />
+          <div className={styles.rightSide}>
+            <input
+              id="description"
+              placeholder="Description"
+              value={formState.description}
+              onChange={(evt) => {
+                setFormState({
+                  ...formState,
+                  description: evt.currentTarget.value,
+                });
+                setValid({
+                  ...valid,
+                  description: isValidDescription(evt.currentTarget.value),
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="valueDate">Date</label>
-          {valid.valueDate ? null : <div>X</div>}
-          <input
-            id="valueDate"
-            placeholder="Date"
-            value={formState.valueDate}
-            onChange={(evt) => {
-              setFormState({
-                ...formState,
-                valueDate: evt.currentTarget.value,
-              });
-              setValid({
-                ...valid,
-                valueDate: isValidDate(evt.currentTarget.value),
-              });
-            }}
-          />
+          <div className={styles.rightSide}>
+            {valid.valueDate ? null : <div>X</div>}
+            <input
+              id="valueDate"
+              placeholder="Date"
+              value={formState.valueDate}
+              onChange={(evt) => {
+                setFormState({
+                  ...formState,
+                  valueDate: evt.currentTarget.value,
+                });
+                setValid({
+                  ...valid,
+                  valueDate: isValidDate(evt.currentTarget.value),
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="my-iban">My IBAN</label>
-          {valid.myIban ? null : <div>X</div>}
-          <input
-            id="my-iban"
-            placeholder="My IBAN"
-            value={formState.myIban}
-            onChange={(evt) => {
-              setFormState({ ...formState, myIban: evt.currentTarget.value });
-              setValid({
-                ...valid,
-                myIban: isValidIban(evt.currentTarget.value),
-              });
-            }}
-          />
+          <div className={styles.rightSide}>
+            {valid.myIban ? null : <div>X</div>}
+            <input
+              id="my-iban"
+              placeholder="My IBAN"
+              value={formState.myIban}
+              onChange={(evt) => {
+                setFormState({ ...formState, myIban: evt.currentTarget.value });
+                setValid({
+                  ...valid,
+                  myIban: isValidIban(evt.currentTarget.value),
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="amount">Amount</label>
-          {valid.amount ? null : <div>X</div>}
-          <input
-            id="amount"
-            placeholder="Amount"
-            type="number"
-            value={formState.amount}
-            onChange={(evt) => {
-              setFormState({ ...formState, amount: evt.currentTarget.value });
-              setValid({
-                ...valid,
-                amount: isValidNumber(evt.currentTarget.value),
-              });
-            }}
-          />
+          <div className={styles.rightSide}>
+            {valid.amount ? null : <div>X</div>}
+            <input
+              id="amount"
+              placeholder="Amount"
+              type="number"
+              value={formState.amount}
+              onChange={(evt) => {
+                setFormState({ ...formState, amount: evt.currentTarget.value });
+                setValid({
+                  ...valid,
+                  amount: isValidNumber(evt.currentTarget.value),
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
-          <label htmlFor="currrency">Currrency</label>
-          {valid.currency ? null : <div>X</div>}
-          <input
-            id="currrency"
-            placeholder="Currrency"
-            value={formState.currency}
-            onChange={(evt) => {
-              setFormState({ ...formState, currency: evt.currentTarget.value });
-              setValid({
-                ...valid,
-                currency: isValidCurrency(evt.currentTarget.value),
-              });
-            }}
-          />
+          <label htmlFor="currrency">Currency</label>
+          <div className={styles.rightSide}>
+            <select
+              id="currrency"
+              value={formState.currency}
+              onChange={(evt) => {
+                setFormState({
+                  ...formState,
+                  currency: evt.currentTarget.value,
+                });
+                setValid({
+                  ...valid,
+                  currency: isValidCurrency(evt.currentTarget.value),
+                });
+              }}
+            >
+              <option value="" disabled>
+                Select Currency
+              </option>
+
+              {validCurrencies.map((currency) => (
+                <option value={currency}>{currency}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="other-party-name">Other Party Name</label>
-          <input
-            id="other-party-name"
-            placeholder="Other Party Name"
-            value={formState.otherPartyName}
-            onChange={(evt) =>
-              setFormState({
-                ...formState,
-                otherPartyName: evt.currentTarget.value,
-              })
-            }
-          />
+          <div className={styles.rightSide}>
+            <input
+              id="other-party-name"
+              placeholder="Other Party Name"
+              value={formState.otherPartyName}
+              onChange={(evt) =>
+                setFormState({
+                  ...formState,
+                  otherPartyName: evt.currentTarget.value,
+                })
+              }
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="other-party-iban">Other Party IBAN</label>
-          {valid.otherPartyIban ? null : <div>X</div>}
-          <input
-            id="other-party-iban"
-            placeholder="Other Party IBAN"
-            value={formState.otherPartyIban}
-            onChange={(evt) => {
-              setFormState({
-                ...formState,
-                otherPartyIban: evt.currentTarget.value,
-              });
+          <div className={styles.rightSide}>
+            {valid.otherPartyIban ? null : <div>X</div>}
+            <input
+              id="other-party-iban"
+              placeholder="Other Party IBAN"
+              value={formState.otherPartyIban}
+              onChange={(evt) => {
+                setFormState({
+                  ...formState,
+                  otherPartyIban: evt.currentTarget.value,
+                });
 
-              const value = evt.currentTarget.value;
-              setValid({
-                ...valid,
-                otherPartyIban: isValidIban(value),
-              });
-            }}
-          />
+                const value = evt.currentTarget.value;
+                setValid({
+                  ...valid,
+                  otherPartyIban: isValidIban(value),
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="balance-after-transaction">
             Balance After Transaction
           </label>
-          {valid.balanceAfterTransaction ? null : <div>X</div>}
-          <input
-            id="balance-after-transaction"
-            placeholder="Balance After Transaction"
-            value={formState.balanceAfterTransaction}
-            onChange={(evt) => {
-              setFormState({
-                ...formState,
-                balanceAfterTransaction: evt.currentTarget.value,
-              });
-              setValid({
-                ...valid,
-                balanceAfterTransaction: isValidNumber(evt.currentTarget.value),
-              });
-            }}
-          />
+          <div className={styles.rightSide}>
+            {valid.balanceAfterTransaction ? null : <div>X</div>}
+            <input
+              id="balance-after-transaction"
+              placeholder="Balance After Transaction"
+              value={formState.balanceAfterTransaction}
+              onChange={(evt) => {
+                setFormState({
+                  ...formState,
+                  balanceAfterTransaction: evt.currentTarget.value,
+                });
+                setValid({
+                  ...valid,
+                  balanceAfterTransaction: isValidNumber(
+                    evt.currentTarget.value,
+                  ),
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className={styles.formGroup}>
